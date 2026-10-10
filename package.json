@@ -8,13 +8,16 @@
     "dev": "pylon dev -c \"bun run .pylon/index.js\"",
     "build": "pylon build",
     "bench:setup": "bun bench/setup.ts",
-    "bench": "bun bench/run.ts"
+    "bench": "bun bench/run.ts",
+    "bench:zod": "bun bench/run-zod.ts"
   },
   "dependencies": {
     "@getcronit/pylon": "^2.0.0",
+    "@hono/zod-validator": "^0.9.1",
     "bun-types": "^1.1.18",
     "hono": "^4.13.13",
-    "pg": "^8.23.1"
+    "pg": "^8.23.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@getcronit/pylon-dev": "^1.0.0",
