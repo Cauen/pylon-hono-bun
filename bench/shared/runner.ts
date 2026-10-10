@@ -10,9 +10,12 @@ import {
   type NewBenchmarkEntry
 } from './database'
 
+type Runtime = 'bun' | 'node'
+
 export interface Scenario {
   name: string
   framework: string
+  runtime: Runtime
   serverEntry: string
   serverDirectory: string
   port: number
@@ -49,9 +52,11 @@ const PYLON_CLI = path.join(PROJECT_DIRECTORY, 'node_modules', '.bin', 'pylon')
 export const PYLON_DIRECTORY = path.join(BENCH_DIRECTORY, 'pylon')
 export const HONO_DIRECTORY = path.join(BENCH_DIRECTORY, 'hono')
 export const POTHOS_DIRECTORY = path.join(BENCH_DIRECTORY, 'pothos')
-export const HONO_SERVER = {serverEntry: 'index.ts', serverDirectory: HONO_DIRECTORY, port: 3101}
-export const PYLON_SERVER = {serverEntry: '.pylon/index.js', serverDirectory: PYLON_DIRECTORY, port: 3102}
-export const POTHOS_SERVER = {serverEntry: 'index.ts', serverDirectory: POTHOS_DIRECTORY, port: 3103}
+export const EXPRESS_DIRECTORY = path.join(BENCH_DIRECTORY, 'express')
+export const HONO_SERVER = {runtime: 'bun', serverEntry: 'index.ts', serverDirectory: HONO_DIRECTORY, port: 3101} as const
+export const PYLON_SERVER = {runtime: 'bun', serverEntry: '.pylon/index.js', serverDirectory: PYLON_DIRECTORY, port: 3102} as const
+export const POTHOS_SERVER = {runtime: 'bun', serverEntry: 'index.ts', serverDirectory: POTHOS_DIRECTORY, port: 3103} as const
+export const EXPRESS_SERVER = {runtime: 'node', serverEntry: 'dist/index.js', serverDirectory: EXPRESS_DIRECTORY, port: 3104} as const
 
 const DURATION = process.env.BENCH_DURATION ?? '10s'
 const CONNECTIONS = process.env.BENCH_CONNECTIONS ?? '100'
@@ -102,8 +107,28 @@ const buildPylonServer = async (): Promise<void> => {
   if (exitCode !== 0) throw new Error('Pylon build failed')
 }
 
+const buildExpressServer = async (): Promise<void> => {
+  const buildOutput = await Bun.build({
+    entrypoints: [path.join(EXPRESS_DIRECTORY, 'index.ts')],
+    outdir: path.join(EXPRESS_DIRECTORY, 'dist'),
+    target: 'node',
+    packages: 'external'
+  })
+  if (!buildOutput.success) {
+    throw new AggregateError(buildOutput.logs, 'Express build failed')
+  }
+}
+
+const buildServers = () => Promise.all([buildPylonServer(), buildExpressServer()])
+
+const readNodeVersion = async (): Promise<string> => {
+  const versionProcess = Bun.spawn(['node', '--version'], {stdout: 'pipe'})
+  const rawVersion = await new Response(versionProcess.stdout).text()
+  return rawVersion.trim().replace(/^v/, '')
+}
+
 const startServer = (scenario: Scenario) =>
-  Bun.spawn(['bun', 'run', scenario.serverEntry], {
+  Bun.spawn([scenario.runtime, scenario.serverEntry], {
     cwd: scenario.serverDirectory,
     env: {...process.env, NODE_ENV: 'production', PORT: String(scenario.port)},
     stdout: 'ignore',
@@ -215,12 +240,17 @@ const formatResultsTable = (
   return [...header, ...rows].join('\n')
 }
 
-const formatReport = (title: string, table: string): string =>
+const formatReport = (
+  title: string,
+  table: string,
+  nodeVersion: string
+): string =>
   [
     `## ${title}`,
     '',
     `- Date: ${new Date().toISOString()}`,
     `- Bun: ${Bun.version}`,
+    `- Node: ${nodeVersion}`,
     `- Duration: ${DURATION} per scenario`,
     `- Connections: ${CONNECTIONS}`,
     `- Database pool size: ${POOL_SIZE} per server`,
@@ -271,12 +301,13 @@ export const runBenchmarkSuite = async (suite: BenchmarkSuite): Promise<void> =>
 
   try {
     await prepareDatabase(pool)
-    await buildPylonServer()
+    await buildServers()
 
     const results = await runScenariosSequentially(suite.scenarios)
     const insertedRowsByFramework = await countEntriesByFramework(pool)
     const table = formatResultsTable(results, insertedRowsByFramework)
-    const report = formatReport(suite.title, table)
+    const nodeVersion = await readNodeVersion()
+    const report = formatReport(suite.title, table, nodeVersion)
 
     const existingResults = await readResultsFile()
     const mergedResults = mergeSection(existingResults, suite.sectionId, report)

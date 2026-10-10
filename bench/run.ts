@@ -1,5 +1,6 @@
 import {
   createMutationBody,
+  EXPRESS_SERVER,
   HONO_SERVER,
   POTHOS_SERVER,
   PYLON_SERVER,
@@ -15,6 +16,13 @@ await runBenchmarkSuite({
       name: 'hono (REST)',
       framework: 'hono',
       ...HONO_SERVER,
+      path: '/entries',
+      body: REST_BODY
+    },
+    {
+      name: 'node + express (REST)',
+      framework: 'express',
+      ...EXPRESS_SERVER,
       path: '/entries',
       body: REST_BODY
     },

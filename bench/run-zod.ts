@@ -1,5 +1,6 @@
 import {
   createMutationBody,
+  EXPRESS_SERVER,
   HONO_SERVER,
   POTHOS_SERVER,
   PYLON_SERVER,
@@ -15,6 +16,13 @@ await runBenchmarkSuite({
       name: 'hono + zod-validator (REST)',
       framework: 'hono-zod',
       ...HONO_SERVER,
+      path: '/zod/entries',
+      body: REST_BODY
+    },
+    {
+      name: 'node + express + zod (REST)',
+      framework: 'express-zod',
+      ...EXPRESS_SERVER,
       path: '/zod/entries',
       body: REST_BODY
     },
