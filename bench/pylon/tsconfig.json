@@ -1,0 +1,7 @@
+{
+  "extends": "@getcronit/pylon/tsconfig.pylon.json",
+  "compilerOptions": {
+    "types": ["bun-types"]
+  },
+  "include": ["../../pylon.d.ts", "src/**/*.ts", "../shared/**/*.ts"]
+}

@@ -6,15 +6,19 @@
   "description": "Generated with `npm create pylon`",
   "scripts": {
     "dev": "pylon dev -c \"bun run .pylon/index.js\"",
-    "build": "pylon build"
+    "build": "pylon build",
+    "bench:setup": "bun bench/setup.ts",
+    "bench": "bun bench/run.ts"
   },
   "dependencies": {
     "@getcronit/pylon": "^2.0.0",
     "bun-types": "^1.1.18",
-    "hono": "^4.13.13"
+    "hono": "^4.13.13",
+    "pg": "^8.23.1"
   },
   "devDependencies": {
-    "@getcronit/pylon-dev": "^1.0.0"
+    "@getcronit/pylon-dev": "^1.0.0",
+    "@types/pg": "^8.23.1"
   },
   "repository": {
     "type": "git",
