@@ -48,8 +48,10 @@ const PYLON_CLI = path.join(PROJECT_DIRECTORY, 'node_modules', '.bin', 'pylon')
 
 export const PYLON_DIRECTORY = path.join(BENCH_DIRECTORY, 'pylon')
 export const HONO_DIRECTORY = path.join(BENCH_DIRECTORY, 'hono')
+export const POTHOS_DIRECTORY = path.join(BENCH_DIRECTORY, 'pothos')
 export const HONO_SERVER = {serverEntry: 'index.ts', serverDirectory: HONO_DIRECTORY, port: 3101}
 export const PYLON_SERVER = {serverEntry: '.pylon/index.js', serverDirectory: PYLON_DIRECTORY, port: 3102}
+export const POTHOS_SERVER = {serverEntry: 'index.ts', serverDirectory: POTHOS_DIRECTORY, port: 3103}
 
 const DURATION = process.env.BENCH_DURATION ?? '10s'
 const CONNECTIONS = process.env.BENCH_CONNECTIONS ?? '100'

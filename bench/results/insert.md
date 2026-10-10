@@ -19,7 +19,7 @@
 <!-- insert-benchmark:start -->
 ## Insert benchmark (Postgres)
 
-- Date: 2026-10-10T00:57:38.761Z
+- Date: 2026-10-10T12:27:14.361Z
 - Bun: 1.4.2
 - Duration: 10s per scenario
 - Connections: 100
@@ -27,15 +27,16 @@
 
 | Scenario | req/s | Success | p50 | p99 | 2xx responses | Rows inserted |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| hono (REST) | 55,213 | 100.00% | 1.61 ms | 6.49 ms | 552,274 | 552,374 |
-| pylon (REST) | 47,215 | 100.00% | 1.89 ms | 6.85 ms | 472,228 | 472,327 |
-| pylon (GraphQL mutation) | 10,792 | 100.00% | 8.17 ms | 23.71 ms | 107,856 | 107,956 |
+| hono (REST) | 52,213 | 100.00% | 1.66 ms | 6.66 ms | 522,322 | 522,422 |
+| pylon (REST) | 47,076 | 100.00% | 1.91 ms | 6.63 ms | 470,898 | 470,998 |
+| pylon (GraphQL mutation) | 10,109 | 100.00% | 9.31 ms | 18.96 ms | 101,026 | 101,072 |
+| hono + pothos (GraphQL mutation) | 17,074 | 100.00% | 5.62 ms | 10.35 ms | 170,710 | 170,809 |
 <!-- insert-benchmark:end -->
 
 <!-- zod-insert-benchmark:start -->
 ## Insert benchmark with Zod validation (Postgres)
 
-- Date: 2026-10-10T01:15:07.300Z
+- Date: 2026-10-10T12:28:02.150Z
 - Bun: 1.4.2
 - Duration: 10s per scenario
 - Connections: 100
@@ -43,7 +44,8 @@
 
 | Scenario | req/s | Success | p50 | p99 | 2xx responses | Rows inserted |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| hono + zod-validator (REST) | 51,924 | 100.00% | 1.72 ms | 6.41 ms | 519,324 | 519,423 |
-| pylon + zod-validator (REST) | 47,236 | 100.00% | 1.94 ms | 6.75 ms | 472,437 | 472,537 |
-| pylon + zod (GraphQL mutation) | 10,939 | 100.00% | 8.29 ms | 20.30 ms | 109,330 | 109,429 |
+| hono + zod-validator (REST) | 50,159 | 100.00% | 1.78 ms | 6.66 ms | 501,663 | 501,763 |
+| pylon + zod-validator (REST) | 43,555 | 100.00% | 2.10 ms | 6.65 ms | 435,586 | 435,684 |
+| pylon + zod (GraphQL mutation) | 10,220 | 100.00% | 8.24 ms | 34.02 ms | 102,127 | 102,226 |
+| hono + pothos + zod (GraphQL mutation) | 17,452 | 100.00% | 5.63 ms | 8.60 ms | 174,482 | 174,582 |
 <!-- zod-insert-benchmark:end -->

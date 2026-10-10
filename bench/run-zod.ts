@@ -1,6 +1,7 @@
 import {
   createMutationBody,
   HONO_SERVER,
+  POTHOS_SERVER,
   PYLON_SERVER,
   REST_BODY,
   runBenchmarkSuite
@@ -28,6 +29,13 @@ await runBenchmarkSuite({
       name: 'pylon + zod (GraphQL mutation)',
       framework: 'pylon-graphql-zod',
       ...PYLON_SERVER,
+      path: '/graphql',
+      body: createMutationBody('createValidatedEntry')
+    },
+    {
+      name: 'hono + pothos + zod (GraphQL mutation)',
+      framework: 'pothos-graphql-zod',
+      ...POTHOS_SERVER,
       path: '/graphql',
       body: createMutationBody('createValidatedEntry')
     }

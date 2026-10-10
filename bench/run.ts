@@ -1,6 +1,7 @@
 import {
   createMutationBody,
   HONO_SERVER,
+  POTHOS_SERVER,
   PYLON_SERVER,
   REST_BODY,
   runBenchmarkSuite
@@ -28,6 +29,13 @@ await runBenchmarkSuite({
       name: 'pylon (GraphQL mutation)',
       framework: 'pylon-graphql',
       ...PYLON_SERVER,
+      path: '/graphql',
+      body: createMutationBody('createEntry')
+    },
+    {
+      name: 'hono + pothos (GraphQL mutation)',
+      framework: 'pothos-graphql',
+      ...POTHOS_SERVER,
       path: '/graphql',
       body: createMutationBody('createEntry')
     }
