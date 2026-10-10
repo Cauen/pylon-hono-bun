@@ -1,5 +1,7 @@
 import {app} from '@getcronit/pylon'
 
+import {searchBooks} from './books'
+
 export const graphql = {
   Query: {
     hello: () => {
@@ -7,7 +9,8 @@ export const graphql = {
     },
     withArgs: (arg: string) => {
       return `Hello, ${arg}!`
-    }
+    },
+    searchBooks
   },
   Mutation: {}
 }
