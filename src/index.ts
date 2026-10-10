@@ -5,7 +5,7 @@ export const graphql = {
     hello: () => {
       return 'Hello, world!'
     },
-    withArgs: (_, {arg}: {arg: string}) => {
+    withArgs: (arg: string) => {
       return `Hello, ${arg}!`
     }
   },
