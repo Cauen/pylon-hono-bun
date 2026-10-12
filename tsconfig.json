@@ -1,6 +1,8 @@
 {
   "extends": "@getcronit/pylon/tsconfig.pylon.json",
   "compilerOptions": {
+    // pylon's base config uses `node` (node10) resolution, which TypeScript 7 removed
+    "moduleResolution": "bundler",
     // add Bun type definitions
     "types": ["bun-types"]
   },
