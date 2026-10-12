@@ -9,7 +9,8 @@
     "build": "pylon build",
     "bench:setup": "bun bench/setup.ts",
     "bench": "bun bench/run.ts",
-    "bench:zod": "bun bench/run-zod.ts"
+    "bench:zod": "bun bench/run-zod.ts",
+    "tscheck": "bun check"
   },
   "dependencies": {
     "@getcronit/pylon": "^2.0.0",
